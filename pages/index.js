@@ -1,8 +1,22 @@
+import React from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
 
-export default function Home() {
+const Home = () => {
+
+  const [assetURI, setAssetURI] = React.useState( null )
+  const [endBidTime, setEndBidTime] = React.useState( null )
+  const [revealEndTime, setRevealEndTime] = React.useState( null )
+  const [isEnded, setIsEnded] = React.useState( false )
+  const [isRevealEnded, setIsRevealEnded] = React.useState( false )
+  const [highestBidAmount, setHighestBidAmount] = React.useState( 0.00 )
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,57 +27,97 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          DelAuction – by <a
+            href="https://twitter.com/sondelali"
+            target="_blank"
+            rel="noopener noreferrer">
+            Delali
+          </a>
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          An <code className={styles.code}>ERC-721</code> smart contract application that enables people to bid on a digital asset.
         </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <Container fluid className="mb-4">
+          <Row>
+            <Col xs={12} md={6}>
+              <div className={styles.boxFlexCenter}>
+                <Card style={{ width: '200px' }}>
+                  <Card.Img variant="bottom" src={assetURI} width="200" height="300" />
+                </Card>
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <div className={styles.boxFlexCenter} style={{ flexDirection: 'column', height: '100%' }}>
+                <div style={{ width: '100%' }}>
+                  {
+                    ( !isEnded || !isRevealEnded ) && (
+                      <div>
+                        <p className={styles.textFaded}>Minimum Bid Amount</p>
+                        <p className={styles.amountTitle}>
+                          <code>
+                            0.1 ETH
+                          </code>
+                        </p>
+                      </div>
+                    )
+                  }
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+                  {
+                    ( !isEnded && !isRevealEnded ) &&
+                    (
+                      <Form>
+                        <Form.Group className="mb-3" controlId="">
+                          <Form.Label>Place bid</Form.Label>
+                          <Form.Control type="text" placeholder="Enter bid amount" />
+                          <Form.Text className="text-muted">
+                            This would be hidden until you reveal your bid.
+                          </Form.Text>
+                        </Form.Group>
+                        <Button variant="primary" type="button">
+                          Bid
+                        </Button>
+                      </Form>
+                    )
+                  } {
+                    ( isEnded && !isRevealEnded ) &&
+                    (
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+                      <Button variant="primary" type="button">
+                        Reveal your bid
+                      </Button>
+                    )
+                  } {
+                    ( isEnded && isRevealEnded ) &&
+                    (
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+                      <div className="mb-3">
+                        <p className={styles.textFaded}>Highest Bid</p>
+                        <p className={styles.amountTitle}>
+                          <code>{Number( highestBidAmount ).toFixed( 2 )} ETH</code>
+                        </p>
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
       </main>
 
       <footer className={styles.footer}>
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          href="https://twitter.com/sondelali"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
+          Powered by Delali
         </a>
       </footer>
     </div>
   )
 }
+
+export default Home
