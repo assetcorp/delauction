@@ -1,8 +1,11 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# Introduction
+
+This is an ERC-721 smart contract I created to teach myself how to interface with the Ethereum blockchain.
 
 ## Getting Started
 
-First, run the development server:
+First, clone the repository <https://github.com/assetcorp/delauction> and run the development server:
 
 ```bash
 npm run dev
@@ -12,23 +15,73 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Environment Variables
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+You will need to specify some environment variables for this application to work well. Please see the example below
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```env
+# App Secrets
+WHITELIST_DOMAINS='[]'
+ADMIN_LOGIN_CODE='YOU_WILL_NEED_THIS_CODE_TO_LOGIN_AS_AN_ADMIN'
 
-## Learn More
+# JWT Secrets
+JWT_SECRET=':)_SOME_RANDOM_CRAP_:p'
 
-To learn more about Next.js, take a look at the following resources:
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+When you specify environment variables, you need to restart the server for the changes to take effect.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+# Kill the server with CTRL-C on windows or CMD-C on Mac. Then:
+yarn start
+```
 
-## Deploy on Vercel
+## How it works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+DelAuction is an ERC-721 smart contract application that enables people to bid on a digital asset. The contract owner or an admin would have the ability to start the auction. Once that happens, anyone with a crypto wallet (use [MetaMask](https://metamask.io/)) can place a bid.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+When the auction is ended, the highest bidder wins the artifact placed for the auction and the auction admin receives the highest bid amount in their crypto wallet.
+
+Those who bid lesser than the highest bidder would be able to `withdraw` their funds once the bid has ended.
+
+## Additional Information
+
+The Smart contract code can be found at `/server/ethereum/contracts/DelAuction.sol`.
+
+### Bugs and Improvements
+
+This is my first ever smart contract so there are a couple of bugs:
+
+#### Ending the auction
+
+When an auction is started, the admin is supposed to be able to end the auction. But there is a bug that prevents that from happening since the code checks to see if the auction end time has been reached before attempting to end the auction.
+
+```js
+// Calling onlyAfter(endBidTime) is the bug here
+function endAuction() external hasStarted() onlyAfter(endBidTime) {
+    if ( bidEnded ) revert AuctionAlreadyEnded();
+    
+    // End the bid
+    emit AuctionEnded( highestBidder, highestBidAmount );
+    bidEnded = true;
+    bidStarted = false;
+    
+    // Pay the auction owner (beneficiary)
+    beneficiary.transfer(highestBidAmount);
+    
+    // Transfer the asset to the highest bidder
+    safeMint(highestBidder);
+}
+```
+
+#### LISTING BIDS
+
+While creating the smart contract, I made it impossible to see the list of bids :(
+
+#### IMPROVING THE WAY ARTIFACT FOR MINTING WORKS WITH THE UI
+
+I made it impossible to see retrieve the `artifactURI` from the contract. :(
+
+```js
+string private artifactURI;
+```
