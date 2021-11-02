@@ -1,7 +1,7 @@
 
 # Introduction
 
-This is an ERC-721 smart contract I created to teach myself how to interface with the Ethereum blockchain.
+This is an ERC-721 smart contract I created to teach myself how to interface with the Ethereum blockchain. View live application at <https://delauction.vercel.app/>.
 
 ## Getting Started
 
