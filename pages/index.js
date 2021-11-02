@@ -354,12 +354,31 @@ const Home = () => {
           </div>
         ) : (
           <div>
-            <p className={styles.title}>Auction Pending...</p>
-            <p className={styles.amountTitle} style={{ textAlign: 'center' }}>
-              <code>
-                Please wait until admin starts
-              </code>
-            </p>
+            {
+              web3PluginAvailable ? (
+                <div>
+                  <p className={styles.title}>Auction Pending...</p>
+                  <p className={styles.amountTitle} style={{ textAlign: 'center' }}>
+                    <code>
+                      Please wait until admin starts
+                    </code>
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p style={{ textAlign: 'center' }}>
+                    <code>
+                      You do not have a Web3 enabled wallet installed. Please try <a href="https://metamask.io/"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        MetaMask
+                      </a>
+                    </code>
+                  </p>
+                </div>
+              )
+            }
+
           </div>
         )
       }
@@ -373,7 +392,7 @@ const Home = () => {
     }
 
     // Check if metamask is available
-    setWeb3PluginAvailable( web3 && Contract )
+    setWeb3PluginAvailable( Web3 && Contract )
 
   }, [] )
 
@@ -387,6 +406,8 @@ const Home = () => {
         setAuctionWalletAddress( accounts[0] )
         await handleUpdateContractInfo()
       } )()
+    } else {
+      setIsLoading( false )
     }
   }, [web3PluginAvailable] )
 
@@ -422,7 +443,7 @@ const Home = () => {
       <main className={styles.main}>
         <h1 className={styles.title}>
           DelAuction – by <a
-            href="https://twitter.com/sondelali"
+            href="https://linkein.com/in/sondelali/"
             target="_blank"
             rel="noopener noreferrer">
             Delali
@@ -553,7 +574,7 @@ const Home = () => {
 
       <footer className={styles.footer}>
         <a
-          href="https://twitter.com/sondelali"
+          href="https://linkein.com/in/sondelali/"
           target="_blank"
           rel="noopener noreferrer"
         >
