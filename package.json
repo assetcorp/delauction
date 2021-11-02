@@ -7,6 +7,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "author": "Delali <https://linkedin.com/in/sondelali>",
   "dependencies": {
     "@truffle/hdwallet-provider": "^1.5.1",
     "bootstrap": "5.1.3",
