@@ -443,7 +443,7 @@ const Home = () => {
       <main className={styles.main}>
         <h1 className={styles.title}>
           DelAuction – by <a
-            href="https://linkein.com/in/sondelali/"
+            href="https://linkedin.com/in/sondelali/"
             target="_blank"
             rel="noopener noreferrer">
             Delali
@@ -574,7 +574,7 @@ const Home = () => {
 
       <footer className={styles.footer}>
         <a
-          href="https://linkein.com/in/sondelali/"
+          href="https://linkedin.com/in/sondelali/"
           target="_blank"
           rel="noopener noreferrer"
         >
