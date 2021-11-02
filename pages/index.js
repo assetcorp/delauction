@@ -103,6 +103,30 @@ const Home = () => {
     }
   }
 
+  const handleWithdrawal = async () => {
+    try {
+      setIsLoading( true )
+      if ( !auctionWalletAddress ) return alert( 'Your wallet address is not specified' )
+
+      try {
+
+        await Contract.methods.withdrawBid().send( {
+          from: auctionWalletAddress,
+        } );
+
+        // Update contract information
+        handleUpdateContractInfo()
+      } catch ( err ) {
+        alert( err.message || 'The transaction failed' )
+      }
+    } catch ( error ) {
+      console.error( error )
+      alert( 'Failed to withdraw bid. Please try again' )
+    } finally {
+      setIsLoading( false )
+    }
+  }
+
   const handleEndAuction = async () => {
     try {
       setIsLoading( true )
@@ -259,6 +283,14 @@ const Home = () => {
               <p className={styles.amountTitle}>
                 <code>{Number( highestBidAmount ).toFixed( 2 )} ETH</code>
               </p>
+              <Button
+                disabled={shouldBid && !( bidAmount >= minimumBidAmount )}
+                variant="primary"
+                type="button"
+                style={{ marginRight: '1rem' }}
+                onClick={handleWithdrawal} >
+                Withdraw Funds
+              </Button>
             </div>
           )
       }
